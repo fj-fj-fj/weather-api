@@ -2,7 +2,8 @@ import logging
 import os
 
 logging.basicConfig(level=logging.DEBUG)
-logging.getLogger('urllib3').setLevel(logging.WARNING)
+for logger in ('urllib3', 'werkzeug'):
+    logging.getLogger(logger).setLevel(logging.WARNING)
 
 
 class BaseConfiguration:
