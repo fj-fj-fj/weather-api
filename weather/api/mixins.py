@@ -19,8 +19,8 @@ class Client:
         self._parsed_data = {}
 
     @staticmethod
-    def form_time(seconds: str) -> datetime:
-        return datetime.now() - timedelta(seconds=seconds)
+    def form_time(timestamp: str) -> datetime:
+        return datetime.fromtimestamp(timestamp)
 
     @property
     def api_url(self) -> str:

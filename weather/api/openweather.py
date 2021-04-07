@@ -14,9 +14,9 @@ class OpenWeather(Client):
 
     def _parse(self) -> None:
         data: dict = self._weather_data
-        time: datetime = self.form_time(data['timezone'])
+        time: datetime = self.form_time(data['dt'])
 
         self._parsed_data['city'] = data['name']
-        self._parsed_data['time'] = str(time)
+        self._parsed_data['time'] = f'{time:%Y-%m-%d %H:%M}'
         self._parsed_data['latitude'] = data['coord']['lat']
         self._parsed_data['longitude'] = data['coord']['lon']

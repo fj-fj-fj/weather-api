@@ -9,7 +9,7 @@ weather_api = Blueprint('weather_api', __name__)
 
 @weather_api.route('/')
 def index() -> Response:
-    city_name = 'London'
+    city_name = 'Moscow'
     return {
         'openweather.com': openweater_service.run(city_name),
         'weatherbit.io': weatherbit_service.run(city_name),
