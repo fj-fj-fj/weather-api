@@ -20,3 +20,4 @@ class OpenWeather(Client):
         self._parsed_data['time'] = f'{time:%Y-%m-%d %H:%M}'
         self._parsed_data['latitude'] = data['coord']['lat']
         self._parsed_data['longitude'] = data['coord']['lon']
+        self._parsed_data['temperature'] = data['main']['temp']

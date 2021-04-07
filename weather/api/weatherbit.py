@@ -18,3 +18,4 @@ class WeatherBit(Client):
         self._parsed_data['time'] = data['ob_time']
         self._parsed_data['latitude'] = data['lat']
         self._parsed_data['longitude'] = data['lon']
+        self._parsed_data['temperature'] = data['temp']
