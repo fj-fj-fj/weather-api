@@ -1,10 +1,10 @@
 from logging import Logger
 
 from settings import BaseConfiguration as base
-from weather.api.mixins import Client
+from weather.api.mixins import Client, AllDataView
 
 
-class WeatherBit(Client):
+class WeatherBit(Client, AllDataView):
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)

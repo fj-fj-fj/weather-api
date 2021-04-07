@@ -1,3 +1,4 @@
+import gzip
 from datetime import datetime
 from typing import Any
 
@@ -61,3 +62,36 @@ class Client:
             f'{type(self).__name__}'
             f'({self._session=!r} {self._session.headers=!r})'
         )
+
+
+class BulkDownloader:
+
+    @property
+    def remote_files_url(self) -> str:
+        return ''.join(self._service_meta_bulk.values())
+
+    def _download_full_data_file(self, *args) -> None:
+        r = self._download_current_weather_data_by_all_cities()
+        self._save_data_to_gz(r, *args)
+
+    def _download_current_weather_data_by_all_cities(self) -> Response:
+        return self._session.get(url=self.remote_files_url, stream=True)
+
+    def _save_data_to_gz(self, r, local_file='weather_16.json.gz') -> None:
+        with open(local_file, 'wb') as f:
+            for chunk in r.raw.stream(1024, decode_content=False):
+                if chunk:
+                    f.write(chunk)
+
+
+class AllDataView(BulkDownloader):
+
+    def show_all(self, *args, fresh_data=None) -> str:
+        if fresh_data is not None:
+            self._download_full_data_file()
+        current_weater_of_all_cities = self._read_data_from_gz(*args)
+        return str(current_weater_of_all_cities)
+
+    def _read_data_from_gz(self, local_file='weather_16.json.gz') -> bytes:
+        with gzip.open(local_file, 'rb') as f:
+            return f.read()

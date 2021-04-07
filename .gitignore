@@ -185,3 +185,5 @@ data/
 
 .story/
 misc.*
+# test data (current weather of all cities)
+weather_16.json.gz

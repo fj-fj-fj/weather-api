@@ -41,3 +41,16 @@ class BaseConfiguration:
         'parameters': 'v2.0/current?city={}&key=',
         'key': API_KEYS['WEATHERBIT_API_KEY'],
     }
+    # NOTE:(Advanceed/Enterprise plans only) Examples of bulk files
+    openweather_meta_bulk = {
+        'url': BASE_URLS['OPENWEATHER'].replace('api', 'bulk'),
+        'parameters': 'sample/weather_16.json.gz',
+        # 'key': API_KEYS['OPENWEATHER_API_KEY'],
+    }
+
+    # NOTE:(Advanceed/Enterprise plans only) THIS HAS NO EXAMPLE!
+    weatherbit_meta_bulk = {
+        'url': BASE_URLS['WEATHERBIT'],
+        'parameters': 'v2.0/bulk/files/current.json.gz?key=',
+        # 'key': API_KEYS['WEATHERBIT_API_KEY'],
+    }
