@@ -1,6 +1,6 @@
-from app import app
+from weather.app import app
 
-from view import index  # noqa: F401
+from weather.view import index  # noqa: F401
 
 
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-from app import app
+from weather.app import app
 
 
 @app.route('/')
