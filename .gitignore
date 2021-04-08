@@ -147,8 +147,8 @@ celerybeat-schedule.*
 *.sage.py
 
 # # dotenv
+.direnv/
 .env
-.env.sample
 .envrc
 .flaskenv
 
