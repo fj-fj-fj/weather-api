@@ -6,7 +6,7 @@ from requests import Session
 from requests.exceptions import SSLError
 from requests.models import Response
 
-from settings import BaseConfiguration as config
+from settings import APIConfiguration as config
 
 
 class Client:

@@ -6,7 +6,7 @@ for logger in ('urllib3', 'werkzeug'):
     logging.getLogger(logger).setLevel(logging.WARNING)
 
 
-class BaseConfiguration:
+class APIConfiguration:
 
     API_KEYS = {
         'OPENWEATHER_API_KEY': os.getenv('OPENWEATHER_API_KEY'),
@@ -54,3 +54,14 @@ class BaseConfiguration:
         'parameters': 'v2.0/bulk/files/current.json.gz?key=',
         # 'key': API_KEYS['WEATHERBIT_API_KEY'],
     }
+
+
+class FlaskConfiguration:
+    PROJECT_NAME = 'Weather-Api'
+    FLASK_APP = os.getenv('FLASK_APP')
+    FLASK_ENV = os.getenv('FLASK_ENV')
+    SQLALCHEMY_TRACK_MODIFICATIONS = os.getenv(
+        'SQLALCHEMY_TRACK_MODIFICATIONS')
+    SQLALCHEMY_DATABASE_URI = os.getenv(
+        'SQLALCHEMY_DATABASE_URI',
+        'sqlite:///../test_sqlite_orm.db')

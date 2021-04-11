@@ -1,26 +1,55 @@
-import re
-from datetime import datetime
+from weather.app import db, ma
 
-from weather.app import db
+
+class Service(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    url = db.Column(db.String(140))
+    weather = db.relationship(
+        'Weather',
+        backref=db.backref('service', lazy=True)
+    )
+
+    def __repr__(self):
+        return f'{type(self).__name__}({self.id!r}, {self.url!r})'
 
 
 class Weather(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    city = db.Column(db.String(50))
-    temp = db.Column(db.Float)
-    lon = db.Column(db.Float)
-    lat = db.Column(db.Float)
-    created = db.Column(db.DateTime, default=datetime.now())
+    service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
 
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        self.slug = self.generate_slug()
-
-    def generate_slug(self) -> str:
-        if self.city:
-            pattern = r'[^\w+]'
-            return re.sub(pattern, '-', self.city)
+    city_name = db.Column(db.String(30), index=True)
+    country = db.Column(db.String(5))
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
+    main = db.Column(db.String(20), index=True)
+    description = db.Column(db.String(40))
+    clouds = db.Column(db.Float)
+    temperature = db.Column(db.Float, index=True)
+    temp_min = db.Column(db.Float)
+    temp_max = db.Column(db.Float)
+    pressure = db.Column(db.Float)
+    humidity = db.Column(db.Float)
+    wind_speed = db.Column(db.Float)
+    wind_deg = db.Column(db.Float)
+    time = db.Column(db.String(30), index=True)
 
     def __repr__(self):
-        return f'{type(self).__name__} (id: {self.id!r}, city: {self.city!r})'
+        return (f'{type(self).__name__}({self.city_name!r}, '
+                f'{self.temperature!r}, {self.description!r})')
+
+
+class ServiceSchema(ma.SQLAlchemyAutoSchema):
+
+    class Meta:
+        model = Service
+        sqla_session = db.session
+
+
+class WheatherSchema(ma.SQLAlchemySchema):
+
+    class Meta:
+        model = Weather
+        include_fk = True
+        sqla_session = db.session

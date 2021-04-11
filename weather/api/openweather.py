@@ -3,7 +3,7 @@ from logging import Logger
 
 import pytemperature
 
-from settings import BaseConfiguration as config
+from settings import APIConfiguration as config
 from weather.api.mixins import Client, AllDataView
 
 

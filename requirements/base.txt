@@ -3,6 +3,7 @@ certifi==2020.12.5
 chardet==4.0.0
 click==7.1.2
 Flask==1.1.2
+flask-marshmallow==0.14.0
 flask-migrate==2.7.0
 flask-script==2.0.6
 flask-sqlalchemy==2.5.1
@@ -12,6 +13,8 @@ itsdangerous==1.1.0
 Jinja2==2.11.3
 Mako==1.1.4
 MarkupSafe==1.1.1
+marshmallow==3.11.1
+marshmallow-sqlalchemy==0.24.2
 mysql-connector-python==8.0.23
 pytemperature==1.0
 python-dateutil==2.8.1
