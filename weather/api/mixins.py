@@ -50,11 +50,11 @@ class Client:
         try:
             return self._service._parse()
         except KeyError as e:
-            self._service._logger.fatal(e)
+            self._service._logger.exception(repr(e))
         except TypeError as e:
-            self._service._logger.fatal(e)
+            self._service._logger.exception(repr(e))
         except SSLError as e:
-            self._service._logger.fatal(e)
+            self._service._logger.exception(repr(e))
         self._parsed_data['Error'] = 'Something went wrong :('
 
     def __repr__(self):
@@ -70,14 +70,15 @@ class BulkDownloader:
     def remote_files_url(self) -> str:
         return ''.join(self._service_meta_bulk.values())
 
-    def _download_full_data_file(self, *args) -> None:
+    def _download_full_data_file(self, *args, **kwargs) -> None:
         r = self._download_current_weather_data_by_all_cities()
-        self._save_data_to_gz(r, *args)
+        self._save_data_to_gz(r, *args, **kwargs)
 
     def _download_current_weather_data_by_all_cities(self) -> Response:
         return self._session.get(url=self.remote_files_url, stream=True)
 
-    def _save_data_to_gz(self, r, local_file='weather_16.json.gz') -> None:
+    def _save_data_to_gz(self, r, *args, **kwargs) -> None:
+        local_file = kwargs.get('local_file', 'weather_16.json.gz')
         with open(local_file, 'wb') as f:
             for chunk in r.raw.stream(1024, decode_content=False):
                 if chunk:
@@ -86,12 +87,17 @@ class BulkDownloader:
 
 class AllDataView(BulkDownloader):
 
-    def show_all(self, *args, fresh_data=None) -> str:
-        if fresh_data is not None:
-            self._download_full_data_file()
-        current_weater_of_all_cities = self._read_data_from_gz(*args)
-        return str(current_weater_of_all_cities)
+    def show_all(self, *args, **kwargs) -> str:
+        self.bulk = True
 
-    def _read_data_from_gz(self, local_file='weather_16.json.gz') -> bytes:
-        with gzip.open(local_file, 'rb') as f:
-            return f.read()
+        if kwargs.get('fresh_data'):
+            self._download_full_data_file(*args, **kwargs)
+
+        self.bulk_downloads = self._read_data_from_gz(*args, **kwargs)
+        self._try_to_parse_row_data()
+        return self._parsed_data
+
+    def _read_data_from_gz(self, *args, **kwargs) -> str:
+        local_file = kwargs.get('local_file', 'weather_16.json.gz')
+        with gzip.open(local_file, 'rt') as f:
+            return f.readlines()

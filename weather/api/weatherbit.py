@@ -19,3 +19,6 @@ class WeatherBit(Client, AllDataView):
         self._parsed_data['latitude'] = data['lat']
         self._parsed_data['longitude'] = data['lon']
         self._parsed_data['temperature'] = data['temp']
+
+    # NOTE: bulk downloads implementation is missing due to
+    # the lack of an example of the structure of  the downloaded file

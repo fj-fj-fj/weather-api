@@ -1,7 +1,6 @@
 import logging
 import os
 
-logging.basicConfig(level=logging.DEBUG)
 for logger in ('urllib3', 'werkzeug'):
     logging.getLogger(logger).setLevel(logging.WARNING)
 
@@ -57,11 +56,14 @@ class APIConfiguration:
 
 
 class FlaskConfiguration:
+
     PROJECT_NAME = 'Weather-Api'
     FLASK_APP = os.getenv('FLASK_APP')
     FLASK_ENV = os.getenv('FLASK_ENV')
+
     SQLALCHEMY_TRACK_MODIFICATIONS = os.getenv(
         'SQLALCHEMY_TRACK_MODIFICATIONS')
+
     SQLALCHEMY_DATABASE_URI = os.getenv(
         'SQLALCHEMY_DATABASE_URI',
         'sqlite:///../test_sqlite_orm.db')

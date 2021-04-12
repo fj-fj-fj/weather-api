@@ -1,10 +1,23 @@
+import re
 from datetime import datetime
 from logging import Logger
 
-import pytemperature
+from pytemperature import k2c
 
 from settings import APIConfiguration as config
 from weather.api.mixins import Client, AllDataView
+
+
+def _cut_substring_after_pattern(key: str, string: str) -> str:
+    # search and return substring or float or int after key
+    result = re.search(
+        fr'(?<=\"{key}\":)("([^\"]*)"+|[-+]?([0-9]*[.,]?[0-9]+|[0-9]+))',
+        string)
+    try:
+        return result.group()
+    except AttributeError:
+        raise AttributeError(
+            f"'NoneType' object has no attribute 'group', {key=}, {string=}")
 
 
 class OpenWeather(Client, AllDataView):
@@ -14,14 +27,43 @@ class OpenWeather(Client, AllDataView):
         self._logger: Logger = Logger(__name__)
         self._service_meta: dict = config.openweather_meta
         self._service_meta_bulk: dict = config.openweather_meta_bulk
+        self.bulk_downloads = ''
+        self.bulk = False
 
     def _parse(self) -> None:
-        data: dict = self._weather_data
-        time: datetime = self.form_time(data['dt'])
-        temperature = pytemperature.k2c(data['main']['temp'])
+        if not self.bulk:
+            data: dict = self._weather_data
+            time: datetime = self.form_time(data['dt'])
+            temperature = k2c(data['main']['temp'])
 
-        self._parsed_data['city'] = data['name']
-        self._parsed_data['time'] = f'{time:%Y-%m-%d %H:%M}'
-        self._parsed_data['latitude'] = data['coord']['lat']
-        self._parsed_data['longitude'] = data['coord']['lon']
-        self._parsed_data['temperature'] = round(temperature)
+            self._parsed_data['city'] = data['name']
+            self._parsed_data['time'] = f'{time:%Y-%m-%d %H:%M}'
+            self._parsed_data['latitude'] = data['coord']['lat']
+            self._parsed_data['longitude'] = data['coord']['lon']
+            self._parsed_data['temperature'] = round(temperature)
+
+            return
+
+        for i, line in enumerate(self.bulk_downloads):
+            city = self._set_value('name', line)
+
+            self._parsed_data |= {city: {
+                'city_name': city,
+                'main': self._set_value('main', line),
+                'description': self._set_value('description', line),
+                'temperature': round(k2c(float(self._set_value('temp', line)))),  # noqa: E501
+                'temp_min': round(k2c(float(self._set_value('temp_min', line)))),  # noqa: E501
+                'temp_max': round(k2c(float(self._set_value('temp_max', line)))),  # noqa: E501
+                'pressure': self._set_value('pressure', line),
+                'humidity': self._set_value('humidity', line),
+                'wind_speed': self._set_value('speed', line),
+                'wind_deg': self._set_value('deg', line),
+                'clouds': self._set_value('all', line),
+                'country': self._set_value('country', line),
+                'longitude': self._set_value('lon', line),
+                'latitude': self._set_value('lat', line),
+                'time': self._set_value('time', line),
+                'service_id': 1}}
+
+    def _set_value(self, *args, **kwargs) -> str:
+        return _cut_substring_after_pattern(*args, **kwargs)
