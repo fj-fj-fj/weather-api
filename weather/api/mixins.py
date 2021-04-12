@@ -60,8 +60,7 @@ class Client:
     def __repr__(self):
         return (
             f'{type(self).__name__}'
-            f'({self._session=!r} {self._session.headers=!r})'
-        )
+            f'({self._session=!r} {self._session.headers=!r})')
 
 
 class BulkDownloader:

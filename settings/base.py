@@ -31,7 +31,7 @@ class APIConfiguration:
 
     openweather_meta = {
         'url': BASE_URLS['OPENWEATHER'],
-        'parameters': 'data/2.5/weather?q={}&appid=',
+        'parameters': 'data/2.5/weather?q={}&units=metric&appid=',
         'key': API_KEYS['OPENWEATHER_API_KEY'],
     }
 

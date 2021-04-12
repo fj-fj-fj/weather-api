@@ -2,8 +2,6 @@ import re
 from datetime import datetime
 from logging import Logger
 
-from pytemperature import k2c
-
 from settings import APIConfiguration as config
 from weather.api.mixins import Client, AllDataView
 
@@ -34,13 +32,12 @@ class OpenWeather(Client, AllDataView):
         if not self.bulk:
             data: dict = self._weather_data
             time: datetime = self.form_time(data['dt'])
-            temperature = k2c(data['main']['temp'])
 
             self._parsed_data['city'] = data['name']
             self._parsed_data['time'] = f'{time:%Y-%m-%d %H:%M}'
             self._parsed_data['latitude'] = data['coord']['lat']
             self._parsed_data['longitude'] = data['coord']['lon']
-            self._parsed_data['temperature'] = round(temperature)
+            self._parsed_data['temperature'] = data['main']['temp']
 
             return
 
@@ -51,9 +48,9 @@ class OpenWeather(Client, AllDataView):
                 'city_name': city,
                 'main': self._set_value('main', line),
                 'description': self._set_value('description', line),
-                'temperature': round(k2c(float(self._set_value('temp', line)))),  # noqa: E501
-                'temp_min': round(k2c(float(self._set_value('temp_min', line)))),  # noqa: E501
-                'temp_max': round(k2c(float(self._set_value('temp_max', line)))),  # noqa: E501
+                'temperature': self._set_value('temp', line),
+                'temp_min': self._set_value('temp_min', line),
+                'temp_max': self._set_value('temp_max', line),
                 'pressure': self._set_value('pressure', line),
                 'humidity': self._set_value('humidity', line),
                 'wind_speed': self._set_value('speed', line),

@@ -16,7 +16,6 @@ MarkupSafe==1.1.1
 marshmallow==3.11.1
 marshmallow-sqlalchemy==0.24.2
 mysql-connector-python==8.0.23
-pytemperature==1.0
 python-dateutil==2.8.1
 python-editor==1.0.4
 protobuf==3.15.7
