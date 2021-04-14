@@ -7,6 +7,7 @@ from requests.exceptions import SSLError
 from requests.models import Response
 
 from settings import APIConfiguration as config
+from weather.database import recreate, db
 
 
 class Client:
@@ -83,6 +84,23 @@ class BulkDownloader:
                 if chunk:
                     f.write(chunk)
 
+    def _save_data_to_db(self) -> None:
+        # due to a circular import
+        from weather.models import Service, Weather
+
+        recreate(db)
+        existing_service = Service.query.filter(
+            Service.url == self.model.get('url')).first()
+        if not existing_service:
+            db.session.add(Service(**self.model))
+            db.session.commit()
+        # REFACTOR: ~ db.session.bulk_insert_mappings(Weather, mappings)
+        for i, weather in enumerate((v for v in self._parsed_data.values())):
+            db.session.add(Weather(**weather))
+            if i and i % 1000 == 0:
+                db.session.commit()
+        db.session.commit()
+
 
 class AllDataView(BulkDownloader):
 
@@ -94,6 +112,10 @@ class AllDataView(BulkDownloader):
 
         self.bulk_downloads = self._read_data_from_gz(*args, **kwargs)
         self._try_to_parse_row_data()
+
+        if kwargs.get('fresh_data') and self._parsed_data:
+            self._save_data_to_db()
+
         return self._parsed_data
 
     def _read_data_from_gz(self, *args, **kwargs) -> str:

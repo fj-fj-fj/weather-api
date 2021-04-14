@@ -25,6 +25,7 @@ class OpenWeather(Client, AllDataView):
         self._logger: Logger = Logger(__name__)
         self._service_meta: dict = config.openweather_meta
         self._service_meta_bulk: dict = config.openweather_meta_bulk
+        self.model = self._generate_fields()
         self.bulk_downloads = ''
         self.bulk = False
 
@@ -41,7 +42,7 @@ class OpenWeather(Client, AllDataView):
 
             return
 
-        for i, line in enumerate(self.bulk_downloads):
+        for line in self.bulk_downloads:
             city = self._set_value('name', line)
 
             self._parsed_data |= {city: {
@@ -60,7 +61,10 @@ class OpenWeather(Client, AllDataView):
                 'longitude': self._set_value('lon', line),
                 'latitude': self._set_value('lat', line),
                 'time': self._set_value('time', line),
-                'service_id': 1}}
+                'service_id': self.model.get('id')}}
 
     def _set_value(self, *args, **kwargs) -> str:
         return _cut_substring_after_pattern(*args, **kwargs)
+
+    def _generate_fields(self) -> dict:
+        return {'id': 1, 'url': self._service_meta.get('url')}

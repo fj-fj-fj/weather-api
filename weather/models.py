@@ -7,8 +7,7 @@ class Service(db.Model):
     url = db.Column(db.String(140))
     weather = db.relationship(
         'Weather',
-        backref=db.backref('service', lazy=True)
-    )
+        backref=db.backref('service', passive_deletes=True))
 
     def __repr__(self):
         return f'{type(self).__name__}({self.id!r}, {self.url!r})'
@@ -17,9 +16,10 @@ class Service(db.Model):
 class Weather(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
+    service_id = db.Column(db.Integer, db.ForeignKey(
+        'service.id', ondelete='cascade'))
 
-    city_name = db.Column(db.String(30), index=True)
+    city_name = db.Column(db.String(80), index=True)
     country = db.Column(db.String(5))
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)

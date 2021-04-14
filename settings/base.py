@@ -67,3 +67,13 @@ class FlaskConfiguration:
     SQLALCHEMY_DATABASE_URI = os.getenv(
         'SQLALCHEMY_DATABASE_URI',
         'sqlite:///../test_sqlite_orm.db')
+
+    SQLALCHEMY_RECORD_QUERIES = os.getenv(
+        'SQLALCHEMY_RECORD_QUERIES')
+
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_pre_ping': True,
+        'pool_timeout': 300,
+        'pool_recycle': 300,
+        'pool_size': 100,
+    }
