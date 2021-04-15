@@ -1,7 +1,7 @@
 from logging import Logger
 
 from settings import APIConfiguration as config
-from weather.api.mixins import Client, AllDataView
+from weather.api.mixins import AllDataView, Client
 
 
 class WeatherBit(Client, AllDataView):

@@ -3,7 +3,7 @@ from datetime import datetime
 from logging import Logger
 
 from settings import APIConfiguration as config
-from weather.api.mixins import Client, AllDataView
+from weather.api.mixins import AllDataView, Client
 
 
 def _cut_substring_after_pattern(key: str, string: str) -> str:

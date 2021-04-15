@@ -1,11 +1,8 @@
-from flask import Blueprint, make_response, request, jsonify
+from flask import Blueprint, jsonify, make_response
 from flask.wrappers import Response
 
-from weather.api import (
-    openweater_service as openweather,
-    weatherbit_service as weatherbit,
-)
-
+from weather.api import openweater_service as openweather
+from weather.api import weatherbit_service as weatherbit
 
 weather_api = Blueprint('weather_api', __name__)
 

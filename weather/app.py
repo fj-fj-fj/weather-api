@@ -1,5 +1,4 @@
 from flask import Flask
-
 from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
@@ -7,7 +6,6 @@ from flask_script import Manager
 from settings.base import FlaskConfiguration
 from weather.blueprint import weather_api
 from weather.database import db
-
 
 app = Flask(__name__)
 app.config.from_object(FlaskConfiguration)

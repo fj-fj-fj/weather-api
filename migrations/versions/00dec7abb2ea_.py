@@ -1,3 +1,5 @@
+# isort: off
+# flake8: noqa
 """Initial migration.
 
 Revision ID: 00dec7abb2ea
@@ -8,7 +10,7 @@ Create Date: 2021-04-14 21:07:34.310292
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
-# flake8: noqa
+
 # revision identifiers, used by Alembic.
 revision = '00dec7abb2ea'
 down_revision = None

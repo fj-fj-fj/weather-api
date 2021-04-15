@@ -1,6 +1,6 @@
 # test this json --> https://api.openweathermap.org/sample/weather_16.json.gz
-import sqlite3
 import json
+import sqlite3
 from pathlib import Path
 
 DB_NAME = 'test_sqlite.db'

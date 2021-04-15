@@ -7,7 +7,7 @@ from requests.exceptions import SSLError
 from requests.models import Response
 
 from settings import APIConfiguration as config
-from weather.database import recreate, db
+from weather.database import db, recreate
 
 
 class Client:
