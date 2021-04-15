@@ -11,6 +11,10 @@ class WeatherBit(Client, AllDataView):
         self._logger: Logger = Logger(__name__)
         self._service_meta: str = config.weatherbit_meta
 
+    @property
+    def url(self) -> str:
+        return self._service_meta.get('url').removeprefix('https://api.')
+
     def _parse(self) -> None:
         data = self._weather_data['data'][0]
 

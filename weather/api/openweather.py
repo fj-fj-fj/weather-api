@@ -29,6 +29,10 @@ class OpenWeather(Client, AllDataView):
         self.bulk_downloads = ''
         self.bulk = False
 
+    @property
+    def url(self) -> str:
+        return self._service_meta.get('url').removeprefix('https://api.')
+
     def _parse(self) -> None:
         if not self.bulk:
             data: dict = self._weather_data
@@ -67,4 +71,4 @@ class OpenWeather(Client, AllDataView):
         return _cut_substring_after_pattern(*args, **kwargs)
 
     def _generate_fields(self) -> dict:
-        return {'id': 1, 'url': self._service_meta.get('url')}
+        return {'id': 1, 'url': self.url}
