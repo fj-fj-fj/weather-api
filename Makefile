@@ -1,3 +1,8 @@
+run:
+	./create_dotenv.sh
+	./install.sh
+	flask run
+
 style:
 	flake8 .
 
