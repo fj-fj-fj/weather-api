@@ -22,5 +22,5 @@ echo "#" >> $FILE
 echo FLASK_ENV=development >> $FILE
 echo FLASK_APP=main.py >> $FILE
 echo PROJECT_URL=http://127.0.0.1:5000 >> $FILE
-echo OPENWEATHER_API_KEY=replace_the_values_with_your_values >> $FILE
-echo WEATHERBIT_API_KEY=replace_the_values_with_your_values >> $FILE
+echo OPENWEATHER_API_KEY=replace_the_value_with_your_values >> $FILE
+echo WEATHERBIT_API_KEY=replace_the_value_with_your_values >> $FILE
