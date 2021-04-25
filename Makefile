@@ -6,15 +6,19 @@ run:
 style:
 	flake8 .
 
-sqlite:
+test-sqlite:
 	python test_sqlite.py
 
-sqlite_orm:
+test-sqlite_orm:
 	python test_sqlite_orm.py
 
+test:
+	pytest
+
 imports:
-	isort . --diff
+	isort .
 
 check:
 	make imports
 	make style
+	make test
